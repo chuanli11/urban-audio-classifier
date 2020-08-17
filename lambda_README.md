@@ -107,7 +107,7 @@ wget https://lambdalabs-files.s3-us-west-2.amazonaws.com/Navy/UrbanSound8K/y-mel
 cd ..
 ```
 
-Generate your own pre-processed data
+Or, you can generate your own pre-processed data
 
 Download [UrbanSound8K](https://urbansounddataset.weebly.com/download-urbansound8k.html) dataset to `urban-audio-classifier/UrbanSound8K`
 
