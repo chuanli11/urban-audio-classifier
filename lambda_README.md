@@ -16,7 +16,84 @@ pip install matplotlib
 pip install scikit-learn
 ```
 
+### Task
+
+The goal of this demo is to build a neural network to classify 10 different urban sound. After trained, the network is able to get classification accuracy of more than 90%, while a random guess will be around 10%.
+
+We use the UrbanSound8K dataset, which contains 8732 labeled sound slices of varying duration up to 4 seconds. The categorization labels being:
+
+1. Air Conditioner
+1. Car Horn
+1. Children Playing
+1. Dog bark
+1. Drilling
+1. Engine Idling
+1. Gun Shot
+1. Jackhammer
+1. Siren
+1. Street Music
+
+
+Below is a spectrogram of the spectrum of frequencies of a signal as it varies with time: a windowing function is applied to each audio frame, then the Short-Term Fourier Transform (STFT) is computed on each frame, finally the power spectrum and filter banks are computed. 
+
+
+<img src="img/stft_spectogram.png" width="800"/>
+
+Instead of STFT, this project uses MEL-Scaled filter banks, which takes into account human perception for sensitivity at appropriate frequencies by converting the conventional frequency to Mel Scale (which is not linear but logarithmic).
+
+<img src="img/mel_scaled_spectogram.png" width="800"/>
+
+
+### Model
+
+The network used in this project has four convolution layers, one dense layers. Batch normalization is used to speed up the training. This is the summary of the model:
+
+```
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_1 (Conv2D)            (None, 38, 172, 32)       320       
+_________________________________________________________________
+leaky_re_lu_1 (LeakyReLU)    (None, 38, 172, 32)       0         
+_________________________________________________________________
+batch_normalization_1 (Batch (None, 38, 172, 32)       128       
+_________________________________________________________________
+spatial_dropout2d_1 (Spatial (None, 38, 172, 32)       0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 36, 170, 32)       9248      
+_________________________________________________________________
+leaky_re_lu_2 (LeakyReLU)    (None, 36, 170, 32)       0         
+_________________________________________________________________
+batch_normalization_2 (Batch (None, 36, 170, 32)       128       
+_________________________________________________________________
+max_pooling2d_1 (MaxPooling2 (None, 18, 85, 32)        0         
+_________________________________________________________________
+spatial_dropout2d_2 (Spatial (None, 18, 85, 32)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 16, 83, 64)        18496     
+_________________________________________________________________
+leaky_re_lu_3 (LeakyReLU)    (None, 16, 83, 64)        0         
+_________________________________________________________________
+batch_normalization_3 (Batch (None, 16, 83, 64)        256       
+_________________________________________________________________
+spatial_dropout2d_3 (Spatial (None, 16, 83, 64)        0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 14, 81, 64)        36928     
+_________________________________________________________________
+leaky_re_lu_4 (LeakyReLU)    (None, 14, 81, 64)        0         
+_________________________________________________________________
+batch_normalization_4 (Batch (None, 14, 81, 64)        256       
+_________________________________________________________________
+global_average_pooling2d_1 ( (None, 64)                0         
+_________________________________________________________________
+dense_1 (Dense)              (None, 10)                650       
+=================================================================
+Total params: 66,410
+Trainable params: 66,026
+Non-trainable params: 384
+```
+
 ### Data Preparation
+
 
 Download pre-generated spectrogram data
 
@@ -50,6 +127,15 @@ python demo_cnn_multi_gpu.py
 
 ### Results
 
+#### Accuracy
+<img src="img/cnn_acc.png" width="800"/>
+
+#### Time to Solution (seconds)
+|   | CPU  | 1xGPU | 2xGPU |
+|---|---|---|---|
+| CNN | 21600  | 720  | 360  |
+
+#### Training Speed
 |   | CPU  | 1xGPU | 2xGPU |
 |---|---|---|---|
 | CNN (sec/epoch) | 60  | 2  | 1  |
