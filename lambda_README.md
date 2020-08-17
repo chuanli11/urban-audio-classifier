@@ -3,6 +3,9 @@
 ### Install
 
 ```
+git clone https://github.com/lambdal/urban-audio-classifier.git
+cd urban-audio-classifier
+
 virtualenv -p /usr/bin/python3.6 venv
 
 . venv/bin/activate
