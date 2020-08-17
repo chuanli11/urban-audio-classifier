@@ -3,3 +3,5 @@ models/*
 UrbanSound8K/
 augmented/
 data/*.npy
+venv/*
+*.pyc
