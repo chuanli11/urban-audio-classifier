@@ -17,6 +17,11 @@ pip install numpy
 pip install pandas
 pip install matplotlib
 pip install scikit-learn
+pip install ipython
+pip install jupyter
+pip install ipykernel
+
+ipython kernel install --user --name=venv
 ```
 
 ### Task
@@ -127,6 +132,59 @@ python demo_cnn.py
 # With multiple GPUs
 python demo_cnn_multi_gpu.py
 ```
+
+
+### Run Jupyter Notebook On a Remote server
+
+Step 1: Install this repo on remove server (remoteuser@remotehost). See [Install](#install)
+
+
+Step 2: Lauch notebook on the server. Chose your own port number for `XXXX`, for example, 5000
+
+```
+# On remote machine
+. venv/bin/activate
+jupyter notebook --no-browser --port=5000
+
+# It will show something like
+http://localhost:5000/?token=73cc2dad5acd168351ed1fe56b2c9dc6138da5acd9ac333b
+```
+
+
+Step 3: Install Jupyter and ipython on local machine
+
+```
+virtualenv -p /usr/bin/python3.6 venv
+. venv/bin/activate
+
+pip install jupyter
+pip install ipython
+```
+
+
+Step 4: Forward port `XXXX` (e.g. 5000) on server to `YYYY` (e.g. 6000) on local machine, and listen to it.
+
+```
+# On local machine
+. venv/bin/activate
+ssh -N -f -L localhost:6000:localhost:5000 remoteuser@remotehost
+```
+
+Step 5: Fire-up Jupyter Notebook on local machine
+
+```
+# On local machine, open a web browswer, go to localhost:YYYY
+localhost:6000
+
+# You will be asked to fill in a token for the first time you connect to the server. 
+# Simply use the token from the server's terminal 
+# For example, 73cc2dad5acd168351ed1fe56b2c9dc6138da5acd9ac333b in the above example
+
+# You should be able to see Jupyter notebook GUI in your browser now
+# Go to the notebook you want to try
+# Goto "Kernel" -> "Change Kernel", and select "venv", which is the virtual envrionment on remote server
+```
+
 
 ### Results
 
